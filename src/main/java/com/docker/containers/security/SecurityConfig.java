@@ -29,7 +29,7 @@ public class SecurityConfig {
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeHttpRequests()
-                    .requestMatchers("/authenticate").permitAll()
+                    .requestMatchers("/authenticate", "/").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/appUsers").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/appUsers").hasAuthority(USER_READ.getPermission())
                     .requestMatchers(HttpMethod.PUT, "/api/appUsers").hasAuthority(USER_WRITE.getPermission())

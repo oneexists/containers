@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Containers Application</title>
+</head>
+<body>
+    <h1>Hello!</h1>
+
+    <p>The application is running.</p>
+    <p>The current date is <span th:text="${#dates.format(today, 'MMM dd, yyyy')}" />.</p>
+</body>
+</html>

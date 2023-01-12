@@ -12,6 +12,7 @@ The application requires three environment variables to be passed on runtime for
 
 ## API Endpoints
 
+- `/`: provides a welcome page with the current date
 - `/authenticate`: provides a user login that returns a JWT token
 - `/refresh`: allows an authenticated user to receive a new JWT token
 - `/api/appUsers`: RESTful endpoint for app users, allowing for:
