@@ -6,9 +6,9 @@ an application using Docker.
 ## Environment Variables
 
 The application requires three environment variables to be passed on runtime for database configuration:
-  - `DB_URL`
-  - `DB_USERNAME`
-  - `DB_PASSWORD`
+  - `CONTAINERS_DB_URL`
+  - `CONTAINERS_DB_USERNAME`
+  - `CONTAINERS_DB_PASSWORD`
 
 ## API Endpoints
 
@@ -19,9 +19,10 @@ The application requires three environment variables to be passed on runtime for
   - GET request: view all users (JWT required)
   - PUT request: update a user (admin JWT required)
   - DELETE request: delete a user (admin JWT required)
-  Sample POST and GET requests are included in the file `http/requests.http`.
+
+Sample requests for creating a user, authentication, and viewing all users can be found [here](/http/requests.http).
 
 ## Testing
 
-Some sample tests are included in `src/test/java/com.docker.containers`. A MySQL database is required for some tests. A 
-schema can be found in the file `sql/schema.sql` with the procedure and data required for the tests to pass.
+Sample tests can be found in the [testing package](/src/test/java/com/docker/containers/). The database schema 
+for testing can be found [here](/sql/schema.sql), which also includes the procedure and sample data.
