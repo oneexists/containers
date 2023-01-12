@@ -1,9 +1,7 @@
 package com.docker.containers.security;
 
-import com.docker.containers.appUser.AppUserService;
 import com.docker.containers.appUser.models.AppUserDTO;
 import com.docker.containers.appUser.models.AppUserDetails;
-import com.docker.containers.response.Result;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +23,10 @@ import java.util.Map;
 public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final JwtConverter converter;
-    private final AppUserService service;
 
-    public AuthenticationController(AuthenticationManager authenticationManager, JwtConverter converter, AppUserService service) {
+    public AuthenticationController(AuthenticationManager authenticationManager, JwtConverter converter) {
         this.authenticationManager = authenticationManager;
         this.converter = converter;
-        this.service = service;
     }
 
     @PostMapping("/authenticate")
