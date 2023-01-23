@@ -9,27 +9,41 @@ show_help() {
     echo "Option        Action"
     echo "--------------------------------------------"
     echo "-h            help menu"
-    echo "-i            initialize application"
+    echo "-i            initialization instructions"
     echo "-k            kill/stop the application"
-    echo "-r            run application"
     echo "-u            update application"
-    echo
+}
+
+instructions() {
     echo "Initialization Instructions:"
-    echo "--------------------------------------------"
-    echo "Ensure Docker is installed."
-    echo "Run the script with ./run.sh -i the first time"
-    echo "to populate the environment variables needed."
-    echo "Then add the environment variables to your"
-    echo "Bash configuration either in the ~/.bashrc"
-    echo "file or ~/.bash_profile file."
+    echo "----------------------------------------------------------"
+    echo "1. Ensure Docker is installed using WSL 2."
     echo
-    echo "After this is completed, run the script again"
-    echo "using ./run.sh -i to finish initialization of"
-    echo "the database and application containers."
+    echo "2. Install the JDK through WSL:"
+    echo "  sudo apt update"
+    echo "  sudo apt install openjdk-17-jdk"
+    echo "  sudo update-alternatives --config java"
     echo
-    echo "Once initialization is complete, the application"
-    echo "can be started using ./run.sh -r and stopped by"
-    echo "using ./run.sh -k to shut down the containers."
+    echo "The last command will state there is nothing to configure."
+    echo "Restart terminal and confirm setup by running 'mvn -v' to"
+    echo "return the Maven verison."
+    echo
+    echo "If Maven doesn't return its version, then it can be installed"
+    echo "using the command:"
+    echo "  sudo apt install maven"
+    echo
+    echo "3. Run the application setup"
+    echo "  The first time running the application will step through the"
+    echo "  database configuration and return the environment variable"
+    echo "  configuration needed. Add the environment variables to your"
+    echo "  Bash configuration either in the ~/.bashrc file or"
+    echo "  ~/.bash_profile file."
+    echo
+    echo "  After this is completed, run the script again to finish"
+    echo "  initialization of the database and application containers."
+    echo
+    echo "Once initialization is complete, the application can be started"
+    echo "using './run.sh' and stopped by using './run.sh -k to shut down."
 }
 
 configure_environment() {
@@ -50,10 +64,12 @@ configure_environment() {
     echo
     echo "Please add the following to your ~/.bashrc or ~/.bash_profile"
     echo "and restart your terminal to apply the changes. Then run this"
-    echo "script using ./run -i to finish database initialization."
+    echo "script again to finish database initialization."
     echo
     echo "# CONTAINERS DATABASE CONFIG"
     echo 
+    echo "export PATH=\"/usr/lib/jvm/java-17-openjdk-amd64/bin/java:\$PATH\""
+	echo "export JAVA_HOME=\"/usr/lib/jvm/java-17-openjdk-amd64\""
     echo "export CONTAINERS_DB_URL=jdbc:mysql://containers-db:3306/$db_name"
     echo "export CONTAINERS_DB_USERNAME=root"
     echo "export CONTAINERS_DB_PASSWORD=$db_password"
@@ -66,6 +82,7 @@ configure_database() {
 
     echo ">> Creating database..."
     docker run -it -d -v mysql_data:/var/lib/mysql -v containers_config:/etc/mysql/conf.d --network containers_net --name containers-db -e MYSQL_ROOT_PASSWORD="$CONTAINERS_DB_PASSWORD" -p 3306:3306 mysql
+    sleep 5
     docker exec -i containers-db mysql -u root -p"$CONTAINERS_DB_PASSWORD" <<< 'CREATE DATABASE '${CONTAINERS_DB_URL:32}';'
     docker exec -i containers-db mysql -u root -p"$CONTAINERS_DB_PASSWORD" < sql/schema.sql
     echo ">> Database created!"
@@ -75,9 +92,8 @@ configure_database() {
     echo ">> Application container created and running!"
 }
 
-initialize() {
-    db_name=$CONTAINERS_DB_URL
-    if [[ -z $db_name ]]; then
+setup() {
+    if [[ -z $CONTAINERS_DB_URL ]]; then
         configure_environment
     else
         configure_database
@@ -110,12 +126,19 @@ update_application() {
     echo ">> Application updated and running!"
 }
 
-while getopts hikru option; do
+while getopts hiku option; do
     case $option in
         h) show_help;;
-        i) initialize;;
+        i) instructions;;
         k) stop_application;;
-        r) run;;
         u) update_application;;
     esac
 done
+
+if [ $OPTIND -eq 1 ]; then
+    if [[ $(docker container ls -a) =~ "containers-api" ]]; then
+        run
+    else
+        setup
+    fi
+fi

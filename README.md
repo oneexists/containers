@@ -37,5 +37,10 @@ Run `./run.sh -h` for usage instructions.
 
 ### Resources
 
-- [Create a database within MySQL Docker container](https://stackoverflow.com/questions/28389458/how-to-execute-mysql-command-from-the-host-to-container-running-mysql-server)
-- [Connect to MySQL inside a Docker container](https://community.xibo.org.uk/t/how-can-i-run-a-sql-command-when-using-a-docker-install/9946)
+- Docker:
+  - [Create a database within MySQL Docker container](https://stackoverflow.com/questions/28389458/how-to-execute-mysql-command-from-the-host-to-container-running-mysql-server)
+  - [Connect to MySQL inside a Docker container](https://community.xibo.org.uk/t/how-can-i-run-a-sql-command-when-using-a-docker-install/9946)
+  - [Configuring WSL](https://docs.docker.com/desktop/windows/wsl/)
+- Bash:
+  - [Testing if command output contains a certain string](https://stackoverflow.com/questions/12375722/how-do-i-test-in-one-line-if-command-output-contains-a-certain-string)
+- [Use Vim to set file format](https://stackoverflow.com/questions/2920416/configure-bin-shm-bad-interpreter)
